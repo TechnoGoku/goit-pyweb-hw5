@@ -13,7 +13,7 @@ class HttpError(Exception):
 async def request(url):
     async with httpx.AsyncClient() as client:
         r = await client.get(url)
-        test = await client.get(r.url)
+        # test = await client.get(r.url)
         if r.status_code == 200:
             result = r.json()
             return result
