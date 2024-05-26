@@ -23,7 +23,7 @@ async def request(url):
 
 async def main():
     try:
-        response = await request('https://api.privatbank.ua/p24api/pubinfo?exchange&coursid=5')
+        response = await request('https://api.privatbank.ua/p24api/exchange_rates?date=01.12.2014')
         return response
     except HttpError as err:
         print(err)
@@ -33,5 +33,6 @@ async def main():
 if __name__ == '__main__':
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+    print(sys.argv)
     r = asyncio.run(main())
     print(r)
