@@ -21,9 +21,11 @@ async def request(url):
             raise HttpError(f"Error status: {r.status_code} for {url}")
 
 
-async def main():
+async def main(index_day):
+    date = datetime.now() - timedelta(days=int(index_day))
+    shift = date.strftime("%d.%m.%Y")
     try:
-        response = await request('https://api.privatbank.ua/p24api/exchange_rates?date=01.12.2014')
+        response = await request(f'https://api.privatbank.ua/p24api/exchange_rates?date={shift}')
         return response
     except HttpError as err:
         print(err)
@@ -34,5 +36,5 @@ if __name__ == '__main__':
     if platform.system() == 'Windows':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     print(sys.argv)
-    r = asyncio.run(main())
+    r = asyncio.run(main(sys.argv[1]))
     print(r)
