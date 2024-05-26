@@ -28,10 +28,10 @@ async def main(index_day):
         index_day = int(index_day)
         if index_day < 0 or index_day > 10:
             print("Index day must be between 0 and 10")
-            return None
+            return f"Choose an integer between 0 and 10"
     except ValueError:
         print("Index day must be an integer")
-        return None
+        return f"Choose an integer between 0 and 10"
     date = datetime.now() - timedelta(days=int(index_day))
     shift = date.strftime("%d.%m.%Y")
 
