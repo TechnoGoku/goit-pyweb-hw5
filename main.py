@@ -47,18 +47,19 @@ async def main(index_day):
             }
 
             for rate in response.get("exchangeRate", []):
-                formatted_rate = {
-                    'baseCurrency': "UAH",
-                    'currency': rate.get("currency"),
-                    'saleRateNB': rate.get("saleRateNB"),
-                    'purchaseRateNB': rate.get("purchaseRateNB"),
-                }
+                if rate.get("currency") in ("EUR", "USD"):
+                    formatted_rate = {
+                        'baseCurrency': "UAH",
+                        'currency': rate.get("currency"),
+                        'saleRateNB': rate.get("saleRateNB"),
+                        'purchaseRateNB': rate.get("purchaseRateNB"),
+                    }
 
-                if 'saleRate' in rate:
-                    formatted_rate['saleRate'] = rate["saleRate"]
-                if 'purchaseRate' in rate:
-                    formatted_rate['purchaseRate'] = rate["purchaseRate"]
-                formatted_response['exchangeRate'].append(formatted_rate)
+                    if 'saleRate' in rate:
+                        formatted_rate['saleRate'] = rate["saleRate"]
+                    if 'purchaseRate' in rate:
+                        formatted_rate['purchaseRate'] = rate["purchaseRate"]
+                    formatted_response['exchangeRate'].append(formatted_rate)
             return formatted_response
         else:
             return None
