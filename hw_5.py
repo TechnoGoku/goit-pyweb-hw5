@@ -2,22 +2,24 @@ import aiohttp
 import asyncio
 import platform
 
-urls = ['https://www.google.com', 'https://www.python.org/asdf', 'https://duckduckgo.com', 'http://test']
+urls = ['https://www.google.com', 'https://www.python.org/asdf', 'https://duckduckgo.com', 'http://test', 'asdf']
+
+
+async def request(url):
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url) as resp:
+                if resp.status == 200:
+                    html = await resp.text()
+                    print(url, html[:150])
+                else:
+                    print(f"Error status: {resp.status} for {url}")
+        except (aiohttp.ClientConnectorError, aiohttp.InvalidURL) as err:
+            print(f'Connection error: {url}', str(err))
 
 
 async def main():
-    async with aiohttp.ClientSession() as session:
-        for url in urls:
-            print(f'Starting {url}')
-            try:
-                async with session.get(url) as resp:
-                    if resp.status == 200:
-                        html = await resp.text()
-                        print(url, html[:150])
-                    else:
-                        print(f"Error status: {resp.status} for {url}")
-            except aiohttp.ClientConnectorError as err:
-                print(f'Connection error: {url}', str(err))
+    pass
 
 
 if __name__ == '__main__':
