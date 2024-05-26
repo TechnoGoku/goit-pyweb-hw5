@@ -18,14 +18,15 @@ async def request(url):
                     result = await resp.json()
                     return result
                 else:
-                    raise HttpError(f"Error status: {r.status_code} for {url}")
+                    raise HttpError(f"Error status: {r.status} for {url}")
         except (aiohttp.ClientConnectorError, aiohttp.InvalidURL) as err:
-            raise HttpError(f"Error connecting to {url}", str(err))
+            raise HttpError(f"Error connecting to {url}, {str(err)}")
 
 
 async def main(index_day):
     date = datetime.now() - timedelta(days=int(index_day))
     shift = date.strftime("%d.%m.%Y")
+
     try:
         response = await request(f'https://api.privatbank.ua/p24api/exchange_rates?date={shift}')
         return response
