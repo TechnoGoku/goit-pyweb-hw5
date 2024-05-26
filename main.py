@@ -24,6 +24,14 @@ async def request(url):
 
 
 async def main(index_day):
+    try:
+        index_day = int(index_day)
+        if index_day < 0 or index_day > 10:
+            print("Index day must be between 0 and 10")
+            return None
+    except ValueError:
+        print("Index day must be an integer")
+        return None
     date = datetime.now() - timedelta(days=int(index_day))
     shift = date.strftime("%d.%m.%Y")
 
