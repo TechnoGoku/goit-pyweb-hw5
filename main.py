@@ -1,7 +1,7 @@
 import sys
 from datetime import datetime, timedelta
 
-import httpx
+import aiohttp
 import asyncio
 import platform
 
@@ -11,14 +11,16 @@ class HttpError(Exception):
 
 
 async def request(url):
-    async with httpx.AsyncClient() as client:
-        r = await client.get(url)
-        # test = await client.get(r.url)
-        if r.status_code == 200:
-            result = r.json()
-            return result
-        else:
-            raise HttpError(f"Error status: {r.status_code} for {url}")
+    async with aiohttp.ClientSession() as client:
+        try:
+            async with client.get(url) as resp:
+                if resp.status == 200:
+                    result = await resp.json()
+                    return result
+                else:
+                    raise HttpError(f"Error status: {r.status_code} for {url}")
+        except (aiohttp.ClientConnectorError, aiohttp.InvalidURL) as err:
+            raise HttpError(f"Error connecting to {url}", str(err))
 
 
 async def main(index_day):
