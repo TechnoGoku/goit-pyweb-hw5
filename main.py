@@ -18,7 +18,7 @@ async def request(url):
                     result = await resp.json()
                     return result
                 else:
-                    raise HttpError(f"Error status: {r.status} for {url}")
+                    raise HttpError(f"Error status: {resp.status} for {url}")
         except (aiohttp.ClientConnectorError, aiohttp.InvalidURL) as err:
             raise HttpError(f"Error connecting to {url}, {str(err)}")
 
@@ -41,15 +41,27 @@ async def main(index_day):
             formatted_response = {
                 "date": response.get("date", shift),
                 "bank": response.get("bank"),
+                "baseCurrency": response.get("baseCurrency", 980),
                 "baseCurrencyLit": response.get("baseCurrencyLit"),
                 'exchangeRate': []
             }
 
-                for rate in
+            for rate in response.get("exchangeRate", []):
+                formatted_rate = {
+                    'baseCurrency': "UAH",
+                    'currency': rate.get("currency"),
+                    'saleRateNB': rate.get("saleRateNB"),
+                    'purchaseRateNB': rate.get("purchaseRateNB"),
+                }
 
-
-            }
-        return response
+                if 'saleRate' in rate:
+                    formatted_rate['saleRate'] = rate["saleRate"]
+                if 'purchaseRate' in rate:
+                    formatted_rate['purchaseRate'] = rate["purchaseRate"]
+                formatted_response['exchangeRate'].append(formatted_rate)
+            return formatted_response
+        else:
+            return None
     except HttpError as err:
         print(err)
         return None
