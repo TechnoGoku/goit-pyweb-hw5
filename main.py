@@ -37,6 +37,18 @@ async def main(index_day):
 
     try:
         response = await request(f'https://api.privatbank.ua/p24api/exchange_rates?date={shift}')
+        if response:
+            formatted_response = {
+                "date": response.get("date", shift),
+                "bank": response.get("bank"),
+                "baseCurrencyLit": response.get("baseCurrencyLit"),
+                'exchangeRate': []
+            }
+
+                for rate in
+
+
+            }
         return response
     except HttpError as err:
         print(err)
